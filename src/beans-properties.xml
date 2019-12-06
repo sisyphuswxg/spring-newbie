@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:contest="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+        导入属性文件
+        - Spring提供了一个PropertyPlaceholderConfigurer的BeanFactory后置处理器，
+          这个处理器允许用户将Bean配置的部分外移到属性文件中，可以在Bean配置文件里使用形式${var}的变量，
+          PropertyPlaceholderConfigurer从属性文件里加载属性，并使用这些属性来替换变量。
+    -->
+    <contest:property-placeholder location="classpath:db.properties"></contest:property-placeholder>
+
+    <bean id="datasource" class="com.sisyphuswxg.spring.beans.DataSource">
+        <property name="properties">
+            <props>
+                <prop key="user">${user}</prop>
+                <prop key="password">${password}</prop>
+                <prop key="jdbcUrl">${jdbcUrl}</prop>
+                <prop key="driverClass">${driverClass}</prop>
+            </props>
+        </property>
+    </bean>
+
+
+
+
+</beans>

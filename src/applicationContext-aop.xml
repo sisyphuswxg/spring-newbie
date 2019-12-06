@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 配置自动扫描的包 -->
+    <context:component-scan base-package="com.sisyphuswxg.spring.aop.impl"></context:component-scan>
+
+    <!--
+        基于AspectJ注解或基于XML配置的AOP
+        1. 加入jar包（手动下载）
+        2. 配置文件中加入aop的命名空间
+        3. 基于注解的方式：在配置文件中加入配置： <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+        4. 把横切关注点的代码抽象到切面的类中
+            - 切面首先是一个IOC中的bean，即加入@Component注解
+            - 切面还需要加入@AspectJ注解
+        5. 在类中声明各种通知（通知：是标注有某种注解的简单的Java方法）
+            - @Before: 前置通知, 在方法执行之前执行
+            - @After: 后置通知, 在方法执行之后执行
+            - @AfterRunning: 返回通知, 在方法返回结果之后执行
+            - @AfterThrowing: 异常通知, 在方法抛出异常之后
+            - @Around: 环绕通知, 围绕着方法执行
+        6. 可以在通知方法中声明一个JoinPoint的参数，就可以访问链接细节，如方法名称和参数值
+    -->
+    <!-- 使AspectJ注解起作用；自动为匹配的类生成代理对象 -->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+</beans>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+        Bean的作用域:
+        1. 可以在<bean>元素的scope属性里设置Bean的作用域
+        2. 默认情况下，Spring只为每个在IOC容器里声明的Bean创建唯一一个实例，整个IOC容器声明的Bean都能共享该实例，
+           所有后续的getBean()调用和Bean引用都将返回整个唯一的Bean实例，该作用域被称为singleton，是Bean的默认作用域。
+        3. 类别：
+           * singleton：仅存在一个Bean实例，Bean以单例的方式存在
+           * prototype：每次调用getBean()都会返回一个新的实例 cancel when I go to home
+    -->
+    <bean id="car" class="com.sisyphuswxg.spring.beans.autowire.Car" scope="prototype">
+        <property name="brand" value="Audi"></property>
+        <property name="price" value="300000"></property>
+    </bean>
+
+
+</beans>

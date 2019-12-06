@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="address" class="com.sisyphuswxg.spring.beans.autowire.Address"
+          p:city="Beijing" p:street="Huilongguan"></bean>
+
+    <!-- Bean配置继承：使用bean的parent属性指定继承哪个bean的配置 -->
+    <bean id="address2" p:street="Dazhongsi" parent="address"></bean>
+
+    <!--
+        抽象Bean：
+        - Bean的abstract属性为true的bean，这样的bean不能被IOC容器实例化，只能用来继承配置
+        - 若一个bean的class属性没有指定，则该bean必须是一个抽象bean
+            - 可以忽略父Bean的class属性，让子Bean指定自己的类，而共享相同的属性配置，但此时abtract必须设为true
+        并不是<bean>元素里的所有属性都会被继承，比如autowire、abstract等。
+    -->
+
+    <!--
+        若要求在配置Person时，必须有一个关联的car！ -> 即：person这个bean要依赖car这个bean
+        => 依赖Bean配置
+        - Spring 允许用户通过 depends-on 属性设定 Bean 前置依赖的Bean，前置依赖的 Bean 会在本 Bean 实例化之前创建好
+        - 如果前置依赖于多个 Bean，则可以通过逗号，空格或的方式配置 Bean 的名称
+    -->
+    <bean id="car" class="com.sisyphuswxg.spring.beans.autowire.Car"
+          p:brand="Audi" p:price="10000"></bean>
+    <bean id="person" class="com.sisyphuswxg.spring.beans.autowire.Person"
+          p:name="Tom" p:address-ref="address2" depends-on="car"></bean>
+
+
+
+</beans>

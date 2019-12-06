@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--
+      Component Scanning: Spring 能够从 classpath 下自动扫描, 侦测和实例化具有特定注解的组件
+        - 指定Spring IOC容器扫描的包
+        - 特定组件包括：
+            - @Component: 基本注解, 标识了一个受 Spring 管理的组件
+            - @Respository: 标识持久层组件
+            - @Service: 标识服务层(业务层)组件
+            - @Controller: 标识表现层组件
+        - 对于扫描到的组件, Spring 有默认的命名策略: 使用非限定类名, 第一个字母小写. 也可以在注解中通过 value 属性值标识组件的名称
+
+        - base-package 属性指定一个需要扫描的基类包，Spring 容器将会扫描这个基类包里及其子包中的所有类.
+        - 当需要扫描多个包时, 可以使用逗号分隔.
+        - 如果仅希望扫描特定的类而非基包下的所有类，可使用 resource-pattern 属性过滤特定的类
+            - resource-pattern="repository/*.class"
+
+        - 可以使用context:exclude-filter子节点指定排查哪些指定表达式的组件
+        - 可以使用context:include-filter子节点指定包含哪些指定表达式的组件，该子节点需要use-default-filters配合使用
+        - <context:component-scan> 下可以拥有若干个 <context:include-filter> 和 <context:exclude-filter> 子节点
+        - <context:include-filter> 和 <context:exclude-filter> 子节点支持多种类型的过滤表达式
+            - annotation: 所有标注了XxxAnnotation的类，该类型采用目标类是否标注了某个注解进行过滤
+            - assinable： 所有继承或扩展XxxService的类，该类型采用目标类是否继承或扩展某个特定类进行过滤
+    -->
+    <context:component-scan base-package="com.sisyphuswxg.spring.beans.annotation">
+        <!--
+        <context:exclude-filter type="annotation" expression="com.sisyphuswxg.spring.beans.annotation.repository"/>
+        -->
+        <!--
+        <context:include-filter type="annotation" expression="com.sisyphuswxg.spring.beans.annotation.repository"/>
+        -->
+    </context:component-scan>
+
+</beans>

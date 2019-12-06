@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--
+        配置bean
+        class: bean的全类名，通过反射的方式在IOC容器中创建Bean，所以要求在Bean中必须有无参数的构造器
+        id: 标明容器中的bean，id唯一
+    -->
+    <bean id="helloWorld" class="com.sisyphuswxg.spring.beans.HelloWorld">
+        <property name="name" value="wangxg"></property>
+    </bean>
+
+    <!--
+        使用构造器注入属性值可以指定参数的位置和参数的类型，以区分重载的构造器；
+        字面值：可以使用字符串表示的值，可以通过<value>元素标签或value属性进行注入；
+            基本数据类型及其封装类，都可以通过字面值注入的方式
+            若字面值包含特殊字符，可以使用<![CDTA[]]>把字面值包裹起来。如 <value><![CDATA[<shanghai^>]]></value> => <shanghai^>
+    -->
+    <bean id="car" class="com.sisyphuswxg.spring.beans.Car">
+        <constructor-arg value="BMW" type="java.lang.String"></constructor-arg>
+        <constructor-arg value="shanghai" index="1" type="java.lang.String"></constructor-arg>
+        <constructor-arg value="300000" index="2"></constructor-arg>
+        <constructor-arg value="280" index="3"></constructor-arg>
+    </bean>
+
+    <!--
+        引用其他Bean
+            组成应用程序之间的Bean经常需要相互协作以完成应用程序的功能，要使Bean能够相互访问，就必须在Bean配置文件中指定对Bean的引用
+            在Bean的配置文件中，可以通过<ref>元素或ref属性为Bean的属性或构造器参数指定对Bean的引用
+            也可以在属性或构造器里包含Bean的声明，这样的Bean称为内部Bean
+    -->
+    <bean id="person" class="com.sisyphuswxg.spring.beans.Person">
+        <constructor-arg index="0" value="name"/>
+        <constructor-arg index="1" value="24"/>
+        <constructor-arg index="2" ref="car"/>
+    </bean>
+
+    <!--
+        内部Bean: 注意观察内部Bean没有id，因为不能被外部引用
+    -->
+    <bean id="person1" class="com.sisyphuswxg.spring.beans.Person">
+        <constructor-arg index="0" value="fifi"/>
+        <constructor-arg index="1" value="29"/>
+        <constructor-arg index="2" ref="car"/>
+    </bean>
+
+    <!--
+        null值：可以使用专有的<null/>元素标签为Bean的字符串或其他对象类型的属性注入null值
+        和Struts、Hibernate等框架一样，Spring支持级联属性的配置
+        为级联属性赋值：注意，属性需要先初始化后才可以为级联属性赋值，否则会有异常
+    -->
+    <bean id="car1" class="com.sisyphuswxg.spring.beans.Car">
+        <constructor-arg value="BYD"></constructor-arg>
+        <constructor-arg value="guangzhou"></constructor-arg>
+        <constructor-arg value="30000"></constructor-arg>
+        <constructor-arg value="180"></constructor-arg>
+    </bean>
+    <bean id="person2" class="com.sisyphuswxg.spring.beans.Person">
+        <constructor-arg index="0" value="fifi"></constructor-arg>
+        <constructor-arg index="1" value="29"></constructor-arg>
+        <constructor-arg index="2" ref="car1"></constructor-arg>
+        <property name="car.price" value="1000"></property>
+        <property name="car.maxSpeed" value="80"></property>
+    </bean>
+
+
+    <!--
+      集合属性：在Spring中可以通过一组内置的xml标签，如<list><set><map>来配置属性。
+        - 配置java.util.List类型的属性，需要指定<list>标签，在标签里包含一些元素，
+          这些标签可以通过<value>指定简单的常量值，通过<ref>指定对其他Bean的引用。
+        - java.util.Map通过<map>标签定义，<map>标签里可以使用多个<entry>作为子标签，每个条目包含一个键和一个值
+          必须在<key>中定义键
+          键和值的类型没有限制，因此可以自由的为他们指定<value><ref><bean><null>元素
+          可以将Map的键值对作为<entry>的属性定义：
+            简单常量使用key和value来定义，Bean引用通过key-ref和value-ref属性定义
+          使用<props>定义java.util.Properties，该标签使用多个<prop>作为子标签，每个<prop>标签必须定义key属性
+    -->
+    <bean id="person3" class="com.sisyphuswxg.spring.beans.Person2">
+        <property name="name" value="Mike"></property>
+        <property name="age" value="50"></property>
+        <property name="cars">
+            <list>
+                <ref bean="car1"></ref>
+                <ref bean="car"></ref>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 配置Map 属性值 -->
+    <bean id="person4" class="com.sisyphuswxg.spring.beans.PersonMap">
+        <property name="name" value="Mike"></property>
+        <property name="age" value="50"></property>
+        <property name="cars">
+            <map>
+                <entry key="AA" value-ref="car"></entry>
+                <entry key="BB" value-ref="car1"></entry>
+            </map>
+        </property>
+    </bean>
+
+    <!-- 配置Properties -->
+    <bean id="datasource" class="com.sisyphuswxg.spring.beans.DataSource">
+        <property name="properties">
+            <!-- 使用props和prop子节点为Properties属性赋值 -->
+            <props>
+                <prop key="user">root</prop>
+                <prop key="password">1234</prop>
+                <prop key="jdbcUrl">jdbc:mysql:///test</prop>
+                <prop key="driverClass">com.mysql.jdbc.Driver</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <!--
+        使用utility schema定义集合
+        - 使用基本的集合标签定义集合时，不能将集合作为独立的Bean定义，导致其他Bean无法引用该集合，所以无法在不同Bean之间共享集合；
+        - 可以使用util schema里的集合标签定义独立的集合Bean，需要注意的是：必须在<beans>根元素里添加util schema定义
+    -->
+    <!-- 配置独立的集合Bean，以供多个bean进行引用 -->
+    <util:list id="cars">
+        <ref bean="car"></ref>
+        <ref bean="car1"></ref>
+    </util:list>
+    <bean id="person5" class="com.sisyphuswxg.spring.beans.Person2">
+        <property name="name" value="Jack"></property>
+        <property name="age" value="34"></property>
+        <property name="cars" ref="cars"></property>
+    </bean>
+
+
+    <!--
+        使用p命令空间：
+        - 为了简化XML文件的配置，越来越多的XML文件采用属性而非元素配置信息
+        - Spring从2.5版本开始引入了一个新的p命名空间，可以通过<bean>元素属性的方式配置Bean的属性
+        - 使用p命令空间后，基于XML的配置方式将进一步简化
+
+        通过p命令空间为bean的属性赋值，需要先导入p命名空间
+        导入命名空间，在配置文件开头加上： xmlns:p="http://www.springframework.org/schema/p"
+    -->
+    <bean id="person6" class="com.sisyphuswxg.spring.beans.Person2" p:age="30" p:name="wangxg" p:cars-ref="cars"></bean>
+
+
+</beans>
